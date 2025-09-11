@@ -9,15 +9,22 @@ class BaseCubitExampleScreenCubit
     extends BaseCubit<BaseCubitExampleScreenState, BaseCubitExampleScreenSR> {
   BaseCubitExampleScreenCubit() : super(BaseCubitExampleScreenInitial());
 
-  void increment() {
+  Future<void> increment() async {
+    showProgress();
     int counter = state is BaseCubitExampleScreenData
         ? (state as BaseCubitExampleScreenData).counter
         : 0;
 
+    print('Incrementing counter');
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    print('Delayed done');
+
     emit(BaseCubitExampleScreenData(counter + 1));
-    addSr(BaseCubitExampleScreenSRShowDialog('Test dialog'));
+
     onFailure(ApiFailure(ServerFailure.unknown));
-    showProgress();
+
     hideProgress();
   }
 }

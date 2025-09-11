@@ -10,6 +10,13 @@ abstract class BaseCubit<State, SR> extends Cubit<State>
         FailureStreamMixin {
   BaseCubit(super.initialState);
 
+  @override
+  emit(State state) {
+    if (!isClosed) {
+      super.emit(state);
+    }
+  }
+
   void dispose() {
     closeProgressStream();
     closeFailureStream();
