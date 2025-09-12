@@ -12,6 +12,8 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
   bool lazyCubit = false;
   C? _cubit;
 
+  C? get cubit => _cubit;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<C>(
@@ -20,6 +22,7 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
         _cubit = cubit;
         return cubit;
       },
+      lazy: lazyCubit,
       child: Builder(
         builder: (context) {
           if (_cubit != null) {

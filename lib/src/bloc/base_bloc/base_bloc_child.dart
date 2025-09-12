@@ -9,6 +9,16 @@ mixin BaseBlocChild<S, B extends BaseBloc<dynamic, S, SR>, SR,
     W extends StatefulWidget> on State<W> {
   B? _bloc;
 
+  B? get bloc => _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bloc ??= blocOf(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<B>.value(

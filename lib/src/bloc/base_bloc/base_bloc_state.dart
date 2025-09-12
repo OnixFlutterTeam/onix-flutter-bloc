@@ -12,6 +12,8 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
   bool lazyBloc = false;
   B? _bloc;
 
+  B? get bloc => _bloc;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<B>(
