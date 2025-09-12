@@ -7,21 +7,32 @@ part 'base_cubit_example_screen_state.dart';
 
 class BaseCubitExampleScreenCubit
     extends BaseCubit<BaseCubitExampleScreenState, BaseCubitExampleScreenSR> {
-  BaseCubitExampleScreenCubit() : super(BaseCubitExampleScreenInitial());
+  BaseCubitExampleScreenCubit() : super(BaseCubitExampleScreenData());
 
   Future<void> increment() async {
     showProgress();
-
-    await Future.delayed(const Duration(seconds: 5));
 
     int counter = state is BaseCubitExampleScreenData
         ? (state as BaseCubitExampleScreenData).counter
         : 0;
 
-    emit(BaseCubitExampleScreenData(counter + 1));
+    int childIndex = state is BaseCubitExampleScreenData
+        ? (state as BaseCubitExampleScreenData).childIndex
+        : 0;
+
+    emit(BaseCubitExampleScreenData(
+        counter: counter + 1, childIndex: childIndex));
 
     onFailure(ApiFailure(ServerFailure.unknown));
 
     hideProgress();
+  }
+
+  Future<void> onChild(int index) async {
+    emit(BaseCubitExampleScreenData(
+        counter: state is BaseCubitExampleScreenData
+            ? (state as BaseCubitExampleScreenData).counter
+            : 0,
+        childIndex: index));
   }
 }

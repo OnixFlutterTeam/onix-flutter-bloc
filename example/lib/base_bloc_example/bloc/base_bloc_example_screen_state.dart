@@ -7,6 +7,6 @@ final class BaseBlocExampleScreenInitial extends BaseBlocExampleScreenState {}
 
 final class BaseBlocExampleScreenData extends BaseBlocExampleScreenState {
   final int counter;
-
-  BaseBlocExampleScreenData(this.counter);
+  final int childIndex;
+  BaseBlocExampleScreenData({this.counter = 0, this.childIndex = 0});
 }

@@ -7,6 +7,7 @@ final class BaseCubitExampleScreenInitial extends BaseCubitExampleScreenState {}
 
 final class BaseCubitExampleScreenData extends BaseCubitExampleScreenState {
   final int counter;
+  final int childIndex;
 
-  BaseCubitExampleScreenData(this.counter);
+  BaseCubitExampleScreenData({this.counter = 0, this.childIndex = 0});
 }

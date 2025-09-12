@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onix_flutter_bloc/onix_flutter_bloc.dart';
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
 
@@ -8,25 +9,45 @@ part 'base_bloc_example_screen_state.dart';
 
 class BaseBlocExampleScreenBloc extends BaseBloc<BaseBlocExampleScreenEvent,
     BaseBlocExampleScreenState, BaseBlocExampleScreenSR> {
-  BaseBlocExampleScreenBloc() : super(BaseBlocExampleScreenInitial()) {
-    on<BaseBlocExampleScreenEventOnIncrement>((event, emit) async {
-      showProgress();
+  BaseBlocExampleScreenBloc() : super(BaseBlocExampleScreenData()) {
+    on<BaseBlocExampleScreenEventOnIncrement>(_onIncrement);
+    on<BaseBlocExampleScreenEventOnChild>(_onChild);
+  }
 
-      print('Incrementing counter');
+  Future<void> _onIncrement(
+    BaseBlocExampleScreenEventOnIncrement event,
+    Emitter<BaseBlocExampleScreenState> emit,
+  ) async {
+    showProgress();
 
-      await Future.delayed(const Duration(seconds: 5));
+    int counter = state is BaseBlocExampleScreenData
+        ? (state as BaseBlocExampleScreenData).counter
+        : 0;
 
-      int counter = state is BaseBlocExampleScreenData
-          ? (state as BaseBlocExampleScreenData).counter
-          : 0;
+    int childIndex = state is BaseBlocExampleScreenData
+        ? (state as BaseBlocExampleScreenData).childIndex
+        : 0;
 
-      print('Delayed done');
+    emit(BaseBlocExampleScreenData(
+        counter: counter + 1, childIndex: childIndex));
 
-      emit(BaseBlocExampleScreenData(counter + 1));
+    onFailure(ApiFailure(ServerFailure.unknown));
 
-      onFailure(ApiFailure(ServerFailure.unknown));
+    hideProgress();
+  }
 
-      hideProgress();
-    });
+  Future<void> _onChild(
+    BaseBlocExampleScreenEventOnChild event,
+    Emitter<BaseBlocExampleScreenState> emit,
+  ) async {
+    showProgress();
+
+    int counter = state is BaseBlocExampleScreenData
+        ? (state as BaseBlocExampleScreenData).counter
+        : 0;
+
+    emit(BaseBlocExampleScreenData(counter: counter, childIndex: event.index));
+
+    hideProgress();
   }
 }

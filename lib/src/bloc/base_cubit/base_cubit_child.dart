@@ -6,30 +6,16 @@ import 'package:onix_flutter_bloc/src/bloc/bloc_typedefs.dart';
 import 'package:onix_flutter_bloc/src/bloc/stream_listener.dart';
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
 
-mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
+mixin BaseCubitChild<S, C extends BaseCubit<S, SR>, SR,
     W extends StatefulWidget> on State<W> {
-  bool _listenersAttached = false;
-  bool lazyCubit = false;
   C? _cubit;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<C>(
-      create: (context) {
-        final cubit = createCubit();
-        _cubit = cubit;
-        return cubit;
-      },
+    return BlocProvider<C>.value(
+      value: cubitOf(context),
       child: Builder(
         builder: (context) {
-          if (_cubit != null) {
-            if (!_listenersAttached) {
-              _listenersAttached = true;
-              _attachListeners(context);
-            }
-            onCubitCreated(context, _cubit!);
-          }
-          initParams(context);
           return buildWidget(context);
         },
       ),
@@ -38,9 +24,6 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
 
   @override
   void dispose() {
-    if (_cubit != null) {
-      _cubit?.dispose();
-    }
     if (context.mounted) {
       context.loaderOverlay.hide();
     }
@@ -48,8 +31,6 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
   }
 
   C cubitOf(BuildContext context) => context.read<C>();
-
-  C createCubit();
 
   Widget srObserver({
     required BuildContext context,
@@ -65,8 +46,6 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
     );
   }
 
-  void onCubitCreated(BuildContext context, C cubit) {}
-
   void onFailure(BuildContext context, Exception failure) {}
 
   void onSR(BuildContext context, SR sr) {}
@@ -80,26 +59,6 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
       }
     }
   }
-
-  void _attachListeners(BuildContext context) {
-    _cubit?.failureStream.listen((failure) {
-      if (!context.mounted) return;
-      onFailure(context, failure);
-    });
-
-    _cubit?.singleResults.listen((sr) {
-      if (!context.mounted) return;
-      onSR(context, sr);
-    });
-
-    _cubit?.progressStream.listen((progress) {
-      if (!context.mounted) return;
-      onProgress(context, progress);
-    });
-  }
-
-// ignore: no-empty-block
-  void initParams(BuildContext context) {}
 
   Widget buildWidget(BuildContext context);
 
