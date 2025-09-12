@@ -15,8 +15,10 @@ class BaseBlocExampleScreen extends StatefulWidget {
   State<BaseBlocExampleScreen> createState() => _BaseBlocExampleScreenState();
 }
 
-class _BaseBlocExampleScreenState extends BaseState<BaseBlocExampleScreenState,
-    BaseBlocExampleScreenBloc, BaseBlocExampleScreenSR, BaseBlocExampleScreen> {
+class _BaseBlocExampleScreenState extends State<BaseBlocExampleScreen>
+    with
+        BaseBlocState<BaseBlocExampleScreenState, BaseBlocExampleScreenBloc,
+            BaseBlocExampleScreenSR, BaseBlocExampleScreen> {
   @override
   BaseBlocExampleScreenBloc createBloc() => BaseBlocExampleScreenBloc();
 

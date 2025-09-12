@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:onix_flutter_bloc/src/bloc/base_bloc/base_bloc.dart';
 import 'package:onix_flutter_bloc/src/bloc/bloc_typedefs.dart';
-import 'package:onix_flutter_bloc/src/bloc/mixins/bloc_builders_mixin.dart';
 import 'package:onix_flutter_bloc/src/bloc/stream_listener.dart';
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
 
-abstract class BaseState<S, B extends BaseBloc<dynamic, S, SR>, SR,
-        W extends StatefulWidget> extends State<W>
-    with BlocBuildersMixin<B, S, SR> {
+mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
+    W extends StatefulWidget> on State<W> {
   bool _listenersAttached = false;
   bool lazyBloc = false;
   B? _bloc;
@@ -104,5 +102,38 @@ abstract class BaseState<S, B extends BaseBloc<dynamic, S, SR>, SR,
       if (!context.mounted) return;
       onProgress(context, progress);
     });
+  }
+
+  Widget blocConsumer({
+    required StateListener<S> builder,
+    required ListenDelegate<S> listener,
+    BlocBuilderCondition<S>? buildWhen,
+    BlocListenerCondition<S>? listenWhen,
+  }) {
+    return BlocConsumer<B, S>(
+      builder: (_, state) => builder(state),
+      listener: listener,
+      buildWhen: buildWhen,
+      listenWhen: listenWhen,
+    );
+  }
+
+  Widget blocBuilder({
+    required BlocWidgetBuilder<S> builder,
+    BlocBuilderCondition<S>? buildWhen,
+  }) {
+    return BlocBuilder<B, S>(builder: builder, buildWhen: buildWhen);
+  }
+
+  Widget blocListener({
+    required ListenDelegate<S> listener,
+    Widget? child,
+    BlocListenerCondition<S>? listenWhen,
+  }) {
+    return BlocListener<B, S>(
+      listener: listener,
+      listenWhen: listenWhen,
+      child: child,
+    );
   }
 }

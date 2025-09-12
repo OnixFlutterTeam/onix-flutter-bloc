@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:onix_flutter_bloc/src/bloc/base_cubit/base_cubit.dart';
 import 'package:onix_flutter_bloc/src/bloc/bloc_typedefs.dart';
-import 'package:onix_flutter_bloc/src/bloc/mixins/bloc_builders_mixin.dart';
 import 'package:onix_flutter_bloc/src/bloc/stream_listener.dart';
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
 
-abstract class BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
-        W extends StatefulWidget> extends State<W>
-    with BlocBuildersMixin<C, S, SR> {
+mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
+    W extends StatefulWidget> on State<W> {
   bool _listenersAttached = false;
   bool lazyCubit = false;
   C? _cubit;
@@ -105,4 +103,37 @@ abstract class BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
   void initParams(BuildContext context) {}
 
   Widget buildWidget(BuildContext context);
+
+  Widget blocConsumer({
+    required StateListener<S> builder,
+    required ListenDelegate<S> listener,
+    BlocBuilderCondition<S>? buildWhen,
+    BlocListenerCondition<S>? listenWhen,
+  }) {
+    return BlocConsumer<C, S>(
+      builder: (_, state) => builder(state),
+      listener: listener,
+      buildWhen: buildWhen,
+      listenWhen: listenWhen,
+    );
+  }
+
+  Widget blocBuilder({
+    required BlocWidgetBuilder<S> builder,
+    BlocBuilderCondition<S>? buildWhen,
+  }) {
+    return BlocBuilder<C, S>(builder: builder, buildWhen: buildWhen);
+  }
+
+  Widget blocListener({
+    required ListenDelegate<S> listener,
+    Widget? child,
+    BlocListenerCondition<S>? listenWhen,
+  }) {
+    return BlocListener<C, S>(
+      listener: listener,
+      listenWhen: listenWhen,
+      child: child,
+    );
+  }
 }

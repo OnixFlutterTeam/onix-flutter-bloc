@@ -12,13 +12,13 @@ class BaseBlocExampleScreenBloc extends BaseBloc<BaseBlocExampleScreenEvent,
     on<BaseBlocExampleScreenEventOnIncrement>((event, emit) async {
       showProgress();
 
+      print('Incrementing counter');
+
+      await Future.delayed(const Duration(seconds: 5));
+
       int counter = state is BaseBlocExampleScreenData
           ? (state as BaseBlocExampleScreenData).counter
           : 0;
-
-      print('Incrementing counter');
-
-      await Future.delayed(const Duration(seconds: 10));
 
       print('Delayed done');
 

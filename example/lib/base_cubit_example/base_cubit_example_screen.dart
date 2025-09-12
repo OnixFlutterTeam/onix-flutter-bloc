@@ -15,11 +15,10 @@ class BaseCubitExampleScreen extends StatefulWidget {
   State<BaseCubitExampleScreen> createState() => _BaseCubitExampleScreenState();
 }
 
-class _BaseCubitExampleScreenState extends BaseCubitState<
-    BaseCubitExampleScreenState,
-    BaseCubitExampleScreenCubit,
-    BaseCubitExampleScreenSR,
-    BaseCubitExampleScreen> {
+class _BaseCubitExampleScreenState extends State<BaseCubitExampleScreen>
+    with
+        BaseCubitState<BaseCubitExampleScreenState, BaseCubitExampleScreenCubit,
+            BaseCubitExampleScreenSR, BaseCubitExampleScreen> {
   @override
   BaseCubitExampleScreenCubit createCubit() => BaseCubitExampleScreenCubit();
 

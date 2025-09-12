@@ -11,15 +11,12 @@ class BaseCubitExampleScreenCubit
 
   Future<void> increment() async {
     showProgress();
+
+    await Future.delayed(const Duration(seconds: 5));
+
     int counter = state is BaseCubitExampleScreenData
         ? (state as BaseCubitExampleScreenData).counter
         : 0;
-
-    print('Incrementing counter');
-
-    await Future.delayed(const Duration(seconds: 10));
-
-    print('Delayed done');
 
     emit(BaseCubitExampleScreenData(counter + 1));
 
