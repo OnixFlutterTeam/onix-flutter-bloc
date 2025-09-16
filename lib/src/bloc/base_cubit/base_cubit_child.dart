@@ -13,19 +13,12 @@ mixin BaseCubitChild<S, C extends BaseCubit<S, SR>, SR,
   C? get cubit => _cubit;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _cubit ??= cubitOf(context);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<C>.value(
       value: cubitOf(context),
       child: Builder(
         builder: (context) {
+          _cubit = cubitOf(context);
           return buildWidget(context);
         },
       ),

@@ -12,19 +12,12 @@ mixin BaseBlocChild<S, B extends BaseBloc<dynamic, S, SR>, SR,
   B? get bloc => _bloc;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _bloc ??= blocOf(context);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<B>.value(
       value: blocOf(context),
       child: Builder(
         builder: (context) {
+          _bloc = blocOf(context);
           return buildWidget(context);
         },
       ),
