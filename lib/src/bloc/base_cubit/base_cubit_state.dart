@@ -16,6 +16,19 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
 
   @override
   Widget build(BuildContext context) {
+    _cubit = _getCurrentCubit(context);
+    if (_cubit != null) {
+      return BlocProvider<C>.value(
+        value: _cubit ?? cubitOf(context),
+        child: Builder(
+          builder: (context) {
+            initParams(context);
+            return buildWidget(context);
+          },
+        ),
+      );
+    }
+
     return BlocProvider<C>(
       create: (context) {
         final cubit = createCubit();
@@ -50,9 +63,20 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
     super.dispose();
   }
 
+  C? _getCurrentCubit(BuildContext context) {
+    try {
+      return BlocProvider.of<C>(context);
+    } catch (e) {
+      return null;
+    }
+  }
+
   C cubitOf(BuildContext context) => context.read<C>();
 
-  C createCubit();
+  C createCubit() => throw UnimplementedError(
+        'createCubit() must be implemented if you are not '
+        'providing a cubit from above the widget tree.',
+      );
 
   Widget srObserver({
     required BuildContext context,
@@ -84,6 +108,11 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
     }
   }
 
+  // ignore: no-empty-block
+  void initParams(BuildContext context) {}
+
+  Widget buildWidget(BuildContext context);
+
   void _attachListeners(BuildContext context) {
     _cubit?.failureStream.listen((failure) {
       if (!context.mounted) return;
@@ -100,11 +129,6 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
       onProgress(context, progress);
     });
   }
-
-// ignore: no-empty-block
-  void initParams(BuildContext context) {}
-
-  Widget buildWidget(BuildContext context);
 
   Widget blocConsumer({
     required StateListener<S> builder,

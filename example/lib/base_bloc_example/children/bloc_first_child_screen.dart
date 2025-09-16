@@ -15,7 +15,7 @@ class BlocFirstChildScreen extends StatefulWidget {
 
 class _BlocFirstChildScreenState extends State<BlocFirstChildScreen>
     with
-        BaseBlocChild<BaseBlocExampleScreenState, BaseBlocExampleScreenBloc,
+        BaseBlocState<BaseBlocExampleScreenState, BaseBlocExampleScreenBloc,
             BaseBlocExampleScreenSR, BlocFirstChildScreen> {
   @override
   Widget buildWidget(BuildContext context) {

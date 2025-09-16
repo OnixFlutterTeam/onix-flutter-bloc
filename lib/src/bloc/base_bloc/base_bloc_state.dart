@@ -16,11 +16,24 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
 
   @override
   Widget build(BuildContext context) {
+    _bloc = _getCurrentBloc(context);
+    if (_bloc != null) {
+      return BlocProvider<B>.value(
+        value: _bloc ?? blocOf(context),
+        child: Builder(
+          builder: (context) {
+            initParams(context);
+            return buildWidget(context);
+          },
+        ),
+      );
+    }
+
     return BlocProvider<B>(
       create: (context) {
-        final bloc = createBloc();
-        _bloc = bloc;
-        return bloc;
+        final cubit = createBloc();
+        _bloc = cubit;
+        return cubit;
       },
       lazy: lazyBloc,
       child: Builder(
@@ -50,9 +63,20 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
     super.dispose();
   }
 
+  B? _getCurrentBloc(BuildContext context) {
+    try {
+      return BlocProvider.of<B>(context);
+    } catch (e) {
+      return null;
+    }
+  }
+
   B blocOf(BuildContext context) => context.read<B>();
 
-  B createBloc();
+  B createBloc() => throw UnimplementedError(
+        'createBloc() must be implemented if you are not '
+        'providing a bloc from above the widget tree.',
+      );
 
   Widget srObserver({
     required BuildContext context,

@@ -29,23 +29,19 @@ class _BaseCubitExampleScreenState extends State<BaseCubitExampleScreen>
   Widget buildWidget(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: srObserver(
-          context: context,
-          onSR: onSR,
-          child: blocBuilder(
-            builder: (context, state) {
-              switch (state) {
-                case BaseCubitExampleScreenData():
-                  return state.childIndex == 0
-                      ? const CubitFirstChildScreen(title: 'First Child Screen')
-                      : const CubitSecondChildScreen(
-                          title: 'Second Child Screen');
-                case BaseCubitExampleScreenInitial():
-                default:
-                  return const CircularProgressIndicator();
-              }
-            },
-          ),
+        child: blocBuilder(
+          builder: (context, state) {
+            switch (state) {
+              case BaseCubitExampleScreenData():
+                return state.childIndex == 0
+                    ? const CubitFirstChildScreen(title: 'First Child Screen')
+                    : const CubitSecondChildScreen(
+                        title: 'Second Child Screen');
+              case BaseCubitExampleScreenInitial():
+              default:
+                return const CircularProgressIndicator();
+            }
+          },
         ),
       ),
     );

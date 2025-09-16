@@ -10,6 +10,3 @@ export 'src/bloc/base_cubit/base_cubit_state.dart' show BaseCubitState;
 export 'src/bloc/stream_listener.dart';
 // Utils
 export 'src/bloc/app_bloc_observer.dart';
-// Children
-export 'src/bloc/base_cubit/base_cubit_child.dart' show BaseCubitChild;
-export 'src/bloc/base_bloc/base_bloc_child.dart' show BaseBlocChild;

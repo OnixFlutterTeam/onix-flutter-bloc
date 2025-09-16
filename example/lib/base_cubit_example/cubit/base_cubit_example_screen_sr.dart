@@ -9,3 +9,10 @@ final class BaseCubitExampleScreenSRShowDialog
 
   BaseCubitExampleScreenSRShowDialog(this.message);
 }
+
+final class BaseCubitExampleScreenSRShowChildDialog
+    extends BaseCubitExampleScreenSR {
+  final String message;
+
+  BaseCubitExampleScreenSRShowChildDialog(this.message);
+}

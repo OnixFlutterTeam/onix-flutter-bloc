@@ -15,7 +15,7 @@ class CubitSecondChildScreen extends StatefulWidget {
 
 class _CubitSecondChildScreenState extends State<CubitSecondChildScreen>
     with
-        BaseCubitChild<BaseCubitExampleScreenState, BaseCubitExampleScreenCubit,
+        BaseCubitState<BaseCubitExampleScreenState, BaseCubitExampleScreenCubit,
             BaseCubitExampleScreenSR, CubitSecondChildScreen> {
   @override
   Widget buildWidget(BuildContext context) {

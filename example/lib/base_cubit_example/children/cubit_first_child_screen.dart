@@ -15,7 +15,7 @@ class CubitFirstChildScreen extends StatefulWidget {
 
 class _CubitFirstChildScreenState extends State<CubitFirstChildScreen>
     with
-        BaseCubitChild<BaseCubitExampleScreenState, BaseCubitExampleScreenCubit,
+        BaseCubitState<BaseCubitExampleScreenState, BaseCubitExampleScreenCubit,
             BaseCubitExampleScreenSR, CubitFirstChildScreen> {
   @override
   Widget buildWidget(BuildContext context) {
@@ -24,23 +24,27 @@ class _CubitFirstChildScreenState extends State<CubitFirstChildScreen>
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            blocBuilder(
-              builder: (context, state) => Text(
-                '${state is BaseCubitExampleScreenData ? state.counter : 0}',
-                style: Theme.of(context).textTheme.headlineMedium,
+      body: srObserver(
+        context: context,
+        onSR: _onSR,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'You have pushed the button this many times:',
               ),
-            ),
-            ElevatedButton(
-                onPressed: () => cubitOf(context).onChild(1),
-                child: const Text('Go to Second Child')),
-          ],
+              blocBuilder(
+                builder: (context, state) => Text(
+                  '${state is BaseCubitExampleScreenData ? state.counter : 0}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () => cubitOf(context).onChild(1),
+                  child: const Text('Go to Second Child')),
+            ],
+          ),
         ),
       ),
       floatingActionButton: Row(
@@ -56,12 +60,36 @@ class _CubitFirstChildScreenState extends State<CubitFirstChildScreen>
           FloatingActionButton(
             heroTag: null,
             onPressed: () => cubitOf(context).addSr(
-                BaseCubitExampleScreenSRShowDialog('Hello from First Child')),
+                BaseCubitExampleScreenSRShowChildDialog(
+                    'Hello from First Child')),
             tooltip: 'Show dialog',
             child: const Icon(Icons.message),
           ),
         ],
       ),
     );
+  }
+
+  void _onSR(
+    BuildContext context,
+    BaseCubitExampleScreenSR sr,
+  ) {
+    if (sr is BaseCubitExampleScreenSRShowChildDialog) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Cubit child dialog'),
+            content: Text(sr.message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
