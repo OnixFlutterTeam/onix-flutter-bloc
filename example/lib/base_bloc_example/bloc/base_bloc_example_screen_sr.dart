@@ -8,3 +8,10 @@ final class BaseBlocExampleScreenSRShowDialog extends BaseBlocExampleScreenSR {
 
   BaseBlocExampleScreenSRShowDialog(this.message);
 }
+
+final class BaseBlocExampleScreenSRShowChildDialog
+    extends BaseBlocExampleScreenSR {
+  final String message;
+
+  BaseBlocExampleScreenSRShowChildDialog(this.message);
+}

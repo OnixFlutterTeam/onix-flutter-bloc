@@ -25,6 +25,27 @@ class _BaseBlocExampleScreenState extends State<BaseBlocExampleScreen>
   BaseBlocExampleScreenBloc createBloc() => BaseBlocExampleScreenBloc();
 
   @override
+  Widget buildWidget(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: blocBuilder(
+          builder: (context, state) {
+            switch (state) {
+              case BaseBlocExampleScreenData():
+                return state.childIndex == 0
+                    ? const BlocFirstChildScreen(title: 'First Child Screen')
+                    : const BlocSecondChildScreen(title: 'Second Child Screen');
+              case BaseBlocExampleScreenInitial():
+              default:
+                return const CircularProgressIndicator();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
   void onSR(
     BuildContext context,
     BaseBlocExampleScreenSR sr,
@@ -62,26 +83,5 @@ class _BaseBlocExampleScreenState extends State<BaseBlocExampleScreen>
     BaseProgressState progress,
   ) {
     debugPrint(progress.toString());
-  }
-
-  @override
-  Widget buildWidget(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: blocBuilder(
-          builder: (context, state) {
-            switch (state) {
-              case BaseBlocExampleScreenData():
-                return state.childIndex == 0
-                    ? const BlocFirstChildScreen(title: 'First Child Screen')
-                    : const BlocSecondChildScreen(title: 'Second Child Screen');
-              case BaseBlocExampleScreenInitial():
-              default:
-                return const CircularProgressIndicator();
-            }
-          },
-        ),
-      ),
-    );
   }
 }
