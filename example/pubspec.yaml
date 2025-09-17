@@ -18,6 +18,9 @@ dependencies:
   dio: ^5.9.0
   onix_flutter_bloc:
     path: ../
+#    git:
+#      url: https://github.com/OnixFlutterTeam/onix-flutter-bloc.git
+#      ref: feature/mixins
   loader_overlay: ^5.0.0
   onix_flutter_core_models: ^0.0.3-beta.1
 
