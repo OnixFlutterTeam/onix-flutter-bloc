@@ -16,11 +16,11 @@ class ExampleScreenBloc extends BaseBloc<BlocEvent,
 Extend you widget from `BaseState`
 
 ```
-class _ExampleScreenState extends BaseState<BlocState,
+class _ExampleScreenState extends State<ExampleScreen> with BaseBlocState<BlocState,
     ExampleScreenBloc, BlocSR, ExampleScreen> {
 ```
 
-Create BLoC instance in `createBloc` function:
+Create BLoC instance in `createBloc` function (not necessary if parent widget provides this BLoC):
 
 ```
  ExampleScreenBloc createBloc() => ExampleScreenBloc();
@@ -47,7 +47,7 @@ srObserver(
 );
 ```
 
-or you can override the onSR method:
+or you can override the onSR method (don't do it for children):
 
 ```
 @override
