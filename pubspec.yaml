@@ -11,5 +11,4 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  loader_overlay: ^5.0.0
   onix_flutter_core_models: ^0.0.3-beta.1

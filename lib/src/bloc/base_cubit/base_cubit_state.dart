@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:onix_flutter_bloc/src/bloc/base_cubit/base_cubit.dart';
 import 'package:onix_flutter_bloc/src/bloc/bloc_typedefs.dart';
 import 'package:onix_flutter_bloc/src/bloc/stream_listener.dart';
@@ -12,12 +11,15 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
   bool lazyCubit = false;
   C? _cubit;
 
+  bool _hasParentBloc = false;
+
   C? get cubit => _cubit;
 
   @override
   Widget build(BuildContext context) {
     _cubit = _getCurrentCubit(context);
     if (_cubit != null) {
+      _hasParentBloc = true;
       return BlocProvider<C>.value(
         value: _cubit ?? cubitOf(context),
         child: Builder(
@@ -54,12 +56,10 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
 
   @override
   void dispose() {
-    if (_cubit != null) {
+    if (_cubit != null && !_hasParentBloc) {
       _cubit?.dispose();
     }
-    if (context.mounted) {
-      context.loaderOverlay.hide();
-    }
+
     super.dispose();
   }
 
@@ -98,15 +98,7 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
 
   void onSR(BuildContext context, SR sr) {}
 
-  void onProgress(BuildContext context, BaseProgressState progress) {
-    if (progress is DefaultProgressState) {
-      if (progress.showProgress) {
-        context.loaderOverlay.show();
-      } else {
-        context.loaderOverlay.hide();
-      }
-    }
-  }
+  void onProgress(BuildContext context, BaseProgressState progress) {}
 
   // ignore: no-empty-block
   void initParams(BuildContext context) {}

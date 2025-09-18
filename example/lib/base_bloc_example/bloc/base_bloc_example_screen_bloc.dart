@@ -40,14 +40,10 @@ class BaseBlocExampleScreenBloc extends BaseBloc<BaseBlocExampleScreenEvent,
     BaseBlocExampleScreenEventOnChild event,
     Emitter<BaseBlocExampleScreenState> emit,
   ) async {
-    showProgress();
-
     int counter = state is BaseBlocExampleScreenData
         ? (state as BaseBlocExampleScreenData).counter
         : 0;
 
     emit(BaseBlocExampleScreenData(counter: counter, childIndex: event.index));
-
-    hideProgress();
   }
 }

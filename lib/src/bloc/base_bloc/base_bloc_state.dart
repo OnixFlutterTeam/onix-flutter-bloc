@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:onix_flutter_bloc/src/bloc/base_bloc/base_bloc.dart';
 import 'package:onix_flutter_bloc/src/bloc/bloc_typedefs.dart';
 import 'package:onix_flutter_bloc/src/bloc/stream_listener.dart';
@@ -12,12 +11,15 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
   bool lazyBloc = false;
   B? _bloc;
 
+  bool _hasParentBloc = false;
+
   B? get bloc => _bloc;
 
   @override
   Widget build(BuildContext context) {
     _bloc = _getCurrentBloc(context);
     if (_bloc != null) {
+      _hasParentBloc = true;
       return BlocProvider<B>.value(
         value: _bloc ?? blocOf(context),
         child: Builder(
@@ -54,11 +56,8 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
 
   @override
   void dispose() {
-    if (_bloc != null) {
+    if (_bloc != null && !_hasParentBloc) {
       _bloc?.dispose();
-    }
-    if (context.mounted) {
-      context.loaderOverlay.hide();
     }
     super.dispose();
   }
@@ -98,15 +97,7 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
 
   void onSR(BuildContext context, SR sr) {}
 
-  void onProgress(BuildContext context, BaseProgressState progress) {
-    if (progress is DefaultProgressState) {
-      if (progress.showProgress) {
-        context.loaderOverlay.show();
-      } else {
-        context.loaderOverlay.hide();
-      }
-    }
-  }
+  void onProgress(BuildContext context, BaseProgressState progress) {}
 
   // ignore: no-empty-block
   void initParams(BuildContext context) {}

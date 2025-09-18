@@ -1,5 +1,6 @@
 import 'package:example/base_cubit_example/cubit/base_cubit_example_screen_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:onix_flutter_bloc/onix_flutter_bloc.dart';
 import 'package:onix_flutter_core_models/onix_flutter_core_models.dart';
 
@@ -84,6 +85,20 @@ class _BaseCubitExampleScreenState extends State<BaseCubitExampleScreen>
     BuildContext context,
     BaseProgressState progress,
   ) {
-    debugPrint(progress.toString());
+    if (progress is DefaultProgressState) {
+      if (progress.showProgress) {
+        context.loaderOverlay.show();
+      } else {
+        context.loaderOverlay.hide();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    if (mounted) {
+      context.loaderOverlay.hide();
+    }
+    super.dispose();
   }
 }
