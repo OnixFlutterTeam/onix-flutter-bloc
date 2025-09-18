@@ -181,6 +181,7 @@ void main() {
       expect(find.byType(BlocFirstChildScreen), findsNothing);
       expect(find.byType(BlocSecondChildScreen), findsOneWidget);
 
+      // Act - Tap show dialog button on second child
       await tester.tap(
         find.ancestor(
           of: find.byIcon(Icons.message),
