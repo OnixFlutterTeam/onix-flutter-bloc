@@ -25,6 +25,7 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
         child: Builder(
           builder: (context) {
             initParams(context);
+            onBlocReady(context, _bloc!);
             return buildWidget(context);
           },
         ),
@@ -33,9 +34,9 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
 
     return BlocProvider<B>(
       create: (context) {
-        final cubit = createBloc();
-        _bloc = cubit;
-        return cubit;
+        final bloc = createBloc();
+        _bloc = bloc;
+        return bloc;
       },
       lazy: lazyBloc,
       child: Builder(
@@ -46,6 +47,7 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
               _attachListeners(context);
             }
             onBlocCreated(context, _bloc!);
+            onBlocReady(context, _bloc!);
           }
           initParams(context);
           return buildWidget(context);
@@ -91,6 +93,9 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
     );
   }
 
+  void onBlocReady(BuildContext context, B bloc) {}
+
+  @deprecated
   void onBlocCreated(BuildContext context, B bloc) {}
 
   void onFailure(BuildContext context, Exception failure) {}
@@ -100,6 +105,7 @@ mixin BaseBlocState<S, B extends BaseBloc<dynamic, S, SR>, SR,
   void onProgress(BuildContext context, BaseProgressState progress) {}
 
   // ignore: no-empty-block
+  @deprecated
   void initParams(BuildContext context) {}
 
   Widget buildWidget(BuildContext context);

@@ -25,6 +25,7 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
         child: Builder(
           builder: (context) {
             initParams(context);
+            onCubitReady(context, _cubit!);
             return buildWidget(context);
           },
         ),
@@ -46,6 +47,7 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
               _attachListeners(context);
             }
             onCubitCreated(context, _cubit!);
+            onCubitReady(context, _cubit!);
           }
           initParams(context);
           return buildWidget(context);
@@ -92,7 +94,10 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
     );
   }
 
+  @deprecated
   void onCubitCreated(BuildContext context, C cubit) {}
+
+  void onCubitReady(BuildContext context, C cubit) {}
 
   void onFailure(BuildContext context, Exception failure) {}
 
@@ -101,6 +106,7 @@ mixin BaseCubitState<S, C extends BaseCubit<S, SR>, SR,
   void onProgress(BuildContext context, BaseProgressState progress) {}
 
   // ignore: no-empty-block
+  @deprecated
   void initParams(BuildContext context) {}
 
   Widget buildWidget(BuildContext context);
